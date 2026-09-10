@@ -10,7 +10,8 @@ set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 echo "── 1. prove the gates can fail ────────────────────────────────────────"
-python3 plugin/tools/qc_layout.py --self-test   || exit 2
+python3 plugin/tools/qc_layout.py --self-test    || exit 2
+python3 plugin/tools/make_fcpxml.py --self-test  || exit 2
 python3 tests/test_layout.py --self-test || exit 2
 
 echo

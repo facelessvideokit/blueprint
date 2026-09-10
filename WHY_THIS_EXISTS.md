@@ -92,8 +92,15 @@ every rule it enforces and asserts each is caught:
 
 ```bash
 python3 plugin/tools/qc_layout.py --self-test
+python3 plugin/tools/make_fcpxml.py --self-test
 python3 tests/test_layout.py --self-test
 ```
+
+The last of those was missing until it was noticed that this file claimed
+otherwise — which is the same bug it warns about, one level up. It now builds a
+timeline beside real media, verifies it clean, then moves the media out from
+under it and asserts the verifier **fails**. Without the move, `--verify` is
+only ever asked the question from the one place that cannot see the problem.
 
 The same discipline is why `test_layout.py` has a **per-line** escape hatch
 rather than whole-file waivers. The first version waived both files in the tree

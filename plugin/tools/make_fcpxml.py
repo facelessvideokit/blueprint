@@ -23,6 +23,7 @@ it is the entire lesson.
 USAGE
     python3 tools/make_fcpxml.py out/ --out out/timeline.fcpxml --seconds 4
     python3 tools/make_fcpxml.py --verify out/timeline.fcpxml
+    python3 tools/make_fcpxml.py --self-test
 
 EXIT CODES
     0  written / verified clean
@@ -128,16 +129,112 @@ def verify(path: Path) -> int:
     return 0
 
 
+def self_test() -> int:
+    """Plant the exact failure this tool exists to catch, and assert it fires.
+
+    The claim in the README is that every tool here ships a self-test that
+    plants a real violation. This one was missing it, which is the same class of
+    bug it warns about: the verifier had only ever been asked the question from
+    the one place that could not see the problem.
+
+    So: build a real timeline over real files, verify it clean, then move the
+    media out from under it — exactly what happens when a timeline is written on
+    one machine and opened on another — and assert the verifier FAILS.
+    """
+    import contextlib
+    import io
+    import shutil
+    import tempfile
+
+    def quiet(fn, *a):
+        """Run a reporter without its report. The verdict below is the output."""
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            return fn(*a)
+
+    failures: list[str] = []
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        media = tmp / "media"
+        media.mkdir()
+        # A 1x1 PNG is enough: nothing here reads pixels, only paths.
+        blank = bytes.fromhex(
+            "89504e470d0a1a0a0000000d4948445200000001000000010806000000"
+            "1f15c4890000000a49444154789c6360000002000100"
+            "05fe02fea7c2b3060000000049454e44ae426082")
+        for name in ("a.png", "b.png"):
+            (media / name).write_bytes(blank)
+
+        timeline = media / "timeline.fcpxml"
+        write(build(sorted(media.glob("*.png")), 4.0, "self-test"), timeline)
+
+        if not timeline.is_file():
+            return _st_fail(["the timeline was not written at all"])
+
+        # 1. the clean case must PASS, or the refusal below proves nothing
+        if quiet(verify, timeline) != 0:
+            failures.append("a timeline written beside its media did NOT verify "
+                            "clean — the known-good case is broken, so nothing "
+                            "this test does afterwards can be trusted")
+
+        # 2. every reference must be absolute — that is the whole trap
+        text = timeline.read_text(encoding="utf-8")
+        if 'src="file:///' not in text:
+            failures.append("references are not absolute file:// URLs — the "
+                            "portability trap this tool warns about is not "
+                            "even present, so --verify measures nothing")
+
+        # 3. move the media out from under it: the timeline is still valid XML
+        #    and every path is now wrong. This is the 151-red-clips failure.
+        moved = tmp / "somewhere_else"
+        moved.mkdir()
+        stranded = moved / "timeline.fcpxml"
+        shutil.copy2(timeline, stranded)
+        for name in ("a.png", "b.png"):
+            shutil.move(str(media / name), str(moved / name))
+        try:
+            ET.parse(stranded)
+        except ET.ParseError as exc:
+            failures.append(f"the stranded timeline is not valid XML ({exc}) — "
+                            "it must be, or the failure is caught by the parser "
+                            "rather than by this gate")
+        if quiet(verify, stranded) == 0:
+            failures.append("verify() reported CLEAN on a timeline whose media "
+                            "had been moved away — the gate cannot fire")
+
+    if failures:
+        return _st_fail(failures)
+    print("self-test OK — a timeline beside its media verifies clean; "
+          "references are absolute; moving the media away FAILS as it must")
+    return 0
+
+
+def _st_fail(msgs: list[str]) -> int:
+    print("SELF-TEST FAILED:")
+    for m in msgs:
+        print("  \u2717", m)
+    print("\nA gate that cannot fire reports PASS.")
+    return 2
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("path", help="a directory of PNGs, or an .fcpxml with --verify")
+    ap.add_argument("path", nargs="?",
+                    help="a directory of PNGs, or an .fcpxml with --verify")
     ap.add_argument("--out", help="where to write the .fcpxml")
     ap.add_argument("--seconds", type=float, default=4.0, help="seconds per still")
     ap.add_argument("--project", default="Faceless Video Kit Blueprint")
     ap.add_argument("--verify", action="store_true",
                     help="check an existing .fcpxml's paths against this filesystem")
+    ap.add_argument("--self-test", action="store_true",
+                    help="plant the failure this tool prevents, and prove it fires")
     args = ap.parse_args()
+
+    if args.self_test:
+        return self_test()
+    if not args.path:
+        ap.error("give a path, or --self-test")
 
     target = Path(args.path)
     if args.verify:
