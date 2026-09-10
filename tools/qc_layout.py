@@ -171,7 +171,7 @@ def run(target: Path, caption_free: bool, allow_overshoot: bool,
         else:
             print(f"{mark}  {m['file']}  hspread {m['hspread']:.2f}  "
                   f"vspread {m['vspread']:.2f}  fill {m['fill']:.2f}  "
-                  f"margins L{m['margins']['left']} R{m['margins']['right']}")
+                  f"margins L={m['margins']['left']} R={m['margins']['right']}")
         for f in fails:
             print(f"        {f}")
         failed += bool(fails)

@@ -4,9 +4,9 @@
 nothing in your toolchain notices.**
 
 ```
-FAIL  before.png  hspread 0.77  vspread 0.75  fill 0.58  margins L192 R193
+FAIL  before.png  hspread 0.77  vspread 0.75  fill 0.58  margins L=192 R=193
         hspread 0.77 < 0.90 — 385px of safe width unused
-pass  after.png   hspread 1.00  vspread 0.70  fill 0.70  margins L0 R1
+pass  after.png   hspread 1.00  vspread 0.70  fill 0.70  margins L=0 R=1
 ```
 
 Both frames render. Both type-check. Both pass every unit test. The only thing
@@ -16,7 +16,22 @@ This repo is a runnable demonstration of that, plus the four rules behind it —
 learned across a six-channel faceless-video operation, and written up in
 [WHY_THIS_EXISTS.md](WHY_THIS_EXISTS.md). Those rules are the valuable part.
 
-## Run it
+## Use it as a Claude Code plugin
+
+```
+/plugin marketplace add facelessvideokit/blueprint
+/plugin install faceless-video-kit-blueprint@faceless-video-kit
+```
+
+That adds a `coded-video-layout` skill — the four rules, in the form Claude
+applies while you are writing a scene — and two commands:
+
+| | |
+|---|---|
+| `/layout-check [frame.png]` | measures the frame, finds the pixel literal that caused it, quotes the line |
+| `/timeline-verify [file.fcpxml]` | checks the baked-in `file://` paths resolve **on this machine** |
+
+## Or run it directly
 
 ```bash
 npm install
@@ -47,6 +62,8 @@ pip3 install numpy Pillow
 | `tools/make_fcpxml.py` | stills → Final Cut timeline, with the absolute-path check |
 | `tests/test_layout.py` | refuses a content dimension written as a pixel literal |
 | `remotion.config.ts` | why the colour space is pinned |
+| `skills/coded-video-layout/` | the four rules, in the form Claude applies them while you write |
+| `commands/` | `/layout-check` and `/timeline-verify` |
 
 Every tool ships `--self-test`, which plants a real violation of every rule it
 enforces and asserts each one is caught. A gate that cannot fire reports PASS.

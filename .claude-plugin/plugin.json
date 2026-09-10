@@ -1,0 +1,25 @@
+{
+  "name": "faceless-video-kit-blueprint",
+  "version": "0.1.0",
+  "description": "Four rules for a coded video pipeline, plus the gates that enforce them. Measures whether a rendered frame actually uses its frame, refuses pixel literals in layout code, and verifies that an FCPXML's baked-in media paths resolve on the machine that will open it. Free tier of Faceless Video Kit.",
+  "author": {
+    "name": "Faceless Video Kit"
+  },
+  "homepage": "https://github.com/facelessvideokit/blueprint",
+  "repository": "https://github.com/facelessvideokit/blueprint",
+  "license": "MIT",
+  "keywords": [
+    "remotion",
+    "video",
+    "layout",
+    "safe-area",
+    "composition",
+    "fcpxml",
+    "final-cut",
+    "timeline",
+    "qc",
+    "gates",
+    "faceless",
+    "render"
+  ]
+}

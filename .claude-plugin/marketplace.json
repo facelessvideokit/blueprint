@@ -1,0 +1,19 @@
+{
+  "name": "faceless-video-kit",
+  "owner": {
+    "name": "Faceless Video Kit",
+    "url": "https://github.com/facelessvideokit"
+  },
+  "description": "Tools for coded video pipelines. The Blueprint is free and MIT licensed.",
+  "plugins": [
+    {
+      "name": "faceless-video-kit-blueprint",
+      "source": "./",
+      "description": "Four rules for a coded video pipeline, and the gates that prove they hold.",
+      "displayName": "Faceless Video Kit — Blueprint",
+      "license": "MIT",
+      "category": "video",
+      "keywords": ["remotion", "video", "layout", "fcpxml", "qc"]
+    }
+  ]
+}
