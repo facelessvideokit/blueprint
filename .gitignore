@@ -1,0 +1,12 @@
+# Build output.
+#
+# out/timeline.fcpxml bakes ABSOLUTE local paths into itself by design — that is
+# the whole subject of rule 4 — so it must never be committed. Regenerate it with
+# `npm run example`.
+out/
+*.fcpxml
+
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store

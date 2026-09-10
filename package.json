@@ -1,0 +1,27 @@
+{
+  "name": "faceless-video-kit-blueprint",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Four rules for a deterministic coded-video pipeline, with the layout gate that enforces one of them. Everything is drawn in code — no image-generation credits.",
+  "license": "MIT",
+  "scripts": {
+    "studio": "remotion studio",
+    "before": "remotion render Before out/before.png --frame=40",
+    "after": "remotion render After out/after.png --frame=40",
+    "qc": "python3 tools/qc_layout.py out",
+    "example": "bash run_example.sh"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.513",
+    "@remotion/cli": "4.0.513",
+    "@remotion/renderer": "4.0.513",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.513"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}
