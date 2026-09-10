@@ -10,7 +10,7 @@ set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 echo "── 1. prove the gates can fail ────────────────────────────────────────"
-python3 tools/qc_layout.py --self-test   || exit 2
+python3 plugin/tools/qc_layout.py --self-test   || exit 2
 python3 tests/test_layout.py --self-test || exit 2
 
 echo
@@ -26,12 +26,12 @@ npx remotion still After  out/after.png  --frame=40 || exit 1
 
 echo
 echo "── 4. measure what was actually drawn ─────────────────────────────────"
-python3 tools/qc_layout.py out/
+python3 plugin/tools/qc_layout.py out/
 QC=$?
 
 echo
 echo "── 5. build a Final Cut timeline and verify every path ────────────────"
-python3 tools/make_fcpxml.py out/ --out out/timeline.fcpxml --seconds 4 || exit 1
+python3 plugin/tools/make_fcpxml.py out/ --out out/timeline.fcpxml --seconds 4 || exit 1
 
 echo
 if [ "$QC" -ne 0 ]; then

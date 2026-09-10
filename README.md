@@ -58,12 +58,12 @@ pip3 install numpy Pillow
 |---|---|
 | `src/lib/Layout.tsx` | `bodyBox` / `columns` / `lattice` — ask the box, don't guess the frame |
 | `src/demo/Chain.tsx` | one scene, drawn both ways |
-| `tools/qc_layout.py` | measures whether a rendered frame uses its frame |
-| `tools/make_fcpxml.py` | stills → Final Cut timeline, with the absolute-path check |
+| `plugin/tools/qc_layout.py` | measures whether a rendered frame uses its frame |
+| `plugin/tools/make_fcpxml.py` | stills → Final Cut timeline, with the absolute-path check |
 | `tests/test_layout.py` | refuses a content dimension written as a pixel literal |
 | `remotion.config.ts` | why the colour space is pinned |
-| `skills/coded-video-layout/` | the four rules, in the form Claude applies them while you write |
-| `commands/` | `/layout-check` and `/timeline-verify` |
+| `plugin/skills/coded-video-layout/` | the four rules, in the form Claude applies them while you write |
+| `plugin/commands/` | `/layout-check` and `/timeline-verify` |
 
 Every tool ships `--self-test`, which plants a real violation of every rule it
 enforces and asserts each one is caught. A gate that cannot fire reports PASS.

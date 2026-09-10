@@ -8,7 +8,7 @@
     "studio": "remotion studio",
     "before": "remotion render Before out/before.png --frame=40",
     "after": "remotion render After out/after.png --frame=40",
-    "qc": "python3 tools/qc_layout.py out",
+    "qc": "python3 plugin/tools/qc_layout.py out",
     "example": "bash run_example.sh"
   },
   "dependencies": {

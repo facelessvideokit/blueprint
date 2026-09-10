@@ -127,17 +127,26 @@ Config.setColorSpace("bt601");   // remotion.config.ts
 
 ## Running the gates
 
-From the repo root (`${CLAUDE_PLUGIN_ROOT}`):
+Two measurers ship with this plugin and need nothing but Python:
 
 ```bash
-npm install && npm run example      # render both, measure both, build a timeline
-python3 tools/qc_layout.py <frame.png>            # does it use its frame?
-python3 tools/qc_layout.py --self-test            # prove the measurer fires
-python3 tests/test_layout.py                      # refuse pixel literals
-python3 tools/make_fcpxml.py --verify <file>      # do the baked paths resolve?
+python3 ${CLAUDE_PLUGIN_ROOT}/tools/qc_layout.py <frame.png>        # does it use its frame?
+python3 ${CLAUDE_PLUGIN_ROOT}/tools/qc_layout.py --self-test        # prove the measurer fires
+python3 ${CLAUDE_PLUGIN_ROOT}/tools/make_fcpxml.py --verify <file>  # do the baked paths resolve?
 ```
 
-Needs Node 18+, Python 3.9+, `numpy` and `Pillow`.
+Needs Python 3.9+ with `numpy` and `Pillow`. **The plugin deliberately carries
+no `package.json`** — installing it should not resolve 148 npm packages to hand
+you a skill and two measurers.
+
+The runnable demo — one scene laid out two ways, rendered, measured, assembled
+into a timeline — lives in the repo rather than the plugin, because that part
+genuinely does need Remotion:
+
+```bash
+git clone https://github.com/facelessvideokit/blueprint
+cd blueprint && npm install && npm run example
+```
 
 **Thresholds** — `hspread` is the fraction of safe width the content actually
 occupies. Below **0.90** something is wrong: either the content is capped in

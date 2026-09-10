@@ -8,12 +8,18 @@
   "plugins": [
     {
       "name": "faceless-video-kit-blueprint",
-      "source": "./",
+      "source": "./plugin",
       "description": "Four rules for a coded video pipeline, and the gates that prove they hold.",
-      "displayName": "Faceless Video Kit — Blueprint",
+      "displayName": "Faceless Video Kit \u2014 Blueprint",
       "license": "MIT",
       "category": "video",
-      "keywords": ["remotion", "video", "layout", "fcpxml", "qc"]
+      "keywords": [
+        "remotion",
+        "video",
+        "layout",
+        "fcpxml",
+        "qc"
+      ]
     }
   ]
 }

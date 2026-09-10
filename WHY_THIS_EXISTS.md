@@ -91,7 +91,7 @@ Every tool here ships `--self-test`, and each one plants a real violation of
 every rule it enforces and asserts each is caught:
 
 ```bash
-python3 tools/qc_layout.py --self-test
+python3 plugin/tools/qc_layout.py --self-test
 python3 tests/test_layout.py --self-test
 ```
 
@@ -123,7 +123,7 @@ that way.
 Write the timeline beside the media, and verify against the real filesystem:
 
 ```bash
-python3 tools/make_fcpxml.py --verify out/timeline.fcpxml
+python3 plugin/tools/make_fcpxml.py --verify out/timeline.fcpxml
 ```
 
 ---
@@ -149,8 +149,8 @@ A runnable demonstration of rules 1, 3 and 4:
 
 - `src/lib/Layout.tsx` — the box
 - `src/demo/Chain.tsx` — one scene, drawn both ways
-- `tools/qc_layout.py` — measures whether a frame uses its frame
-- `tools/make_fcpxml.py` — stills to a timeline, with the path check
+- `plugin/tools/qc_layout.py` — measures whether a frame uses its frame
+- `plugin/tools/make_fcpxml.py` — stills to a timeline, with the path check
 - `tests/test_layout.py` — refuses a pixel literal
 
 `npm run example` renders both, measures both, and builds a timeline. The broken
